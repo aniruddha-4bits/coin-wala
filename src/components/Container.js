@@ -16,12 +16,17 @@ export default class Container extends Component {
         axios.get(`https://api.coingecko.com/api/v3/coins/list`)
             .then(res => {
                 const coinsList = res.data;
-
-                this.setState({ coinsList: coinsList });
-                console.log(coinsList)
+                const data = coinsList.map((el, i) => {
+                    var o = Object.assign({}, el)
+                    o.index = i + 1;
+                    return o
+                })
+                console.log(data)
+                this.setState({ coinsList: data });
+                // console.log(coinsList)
             }).catch(error => {
                 this.setState({ error })
-                console.log(error)
+                // console.log(error)
 
             })
     }
@@ -31,16 +36,21 @@ export default class Container extends Component {
             return (<div>Error: {error.message}</div>)
         }
         else {
-            const columns = [{
-                dataField: 'id',
-                text: 'Coin ID'
-            }, {
-                dataField: 'name',
-                text: 'Coin Name'
-            }, {
-                dataField: 'symbol',
-                text: 'Coin Symbol'
-            }];
+            const columns = [
+                {
+                    dataField: 'index',
+                    text: 'No.'
+                },
+                {
+                    dataField: 'id',
+                    text: 'Coin ID'
+                }, {
+                    dataField: 'name',
+                    text: 'Coin Name'
+                }, {
+                    dataField: 'symbol',
+                    text: 'Coin Symbol'
+                }];
             const options = {
                 onSizePerPageChange: (sizePerPage, page) => {
                     console.log('Size per page change!!!');
